@@ -5,7 +5,7 @@ const { count } = require('console');
 
 activeTrack = {}
 
-const ws = http.createServer();
+const httpSrv = http.createServer();
 const wss = new WebSocketServer({ noServer: true });
 
 wss.on('connection', function connection(ws, request, client) {
@@ -18,11 +18,11 @@ wss.on('connection', function connection(ws, request, client) {
     ws.on('close', function close() {
         console.log('client disconnected');
         removeClientToTrack(ws);
-        console.log(activeTrack)
+        //console.log(activeTrack)
     });
 });
 
-ws.on('upgrade', function upgrade(request, socket, head) {
+httpSrv.on('upgrade', function upgrade(request, socket, head) {
     socket.on('error', console.error);
     const { pathname } = url.parse(request.url);
 
@@ -32,7 +32,7 @@ ws.on('upgrade', function upgrade(request, socket, head) {
             getTackConfig(pathname).then((port) => {
                 appendClientToTrack(ws, port);
                 wss.emit('connection', ws, request);
-                console.log(activeTrack)
+                //console.log(activeTrack)
             }).catch((err) => {
                 console.log(err);
                 socket.destroy();
@@ -43,7 +43,7 @@ ws.on('upgrade', function upgrade(request, socket, head) {
     }
 });
 
-ws.listen(8080, "0.0.0.0", () => {
+httpSrv.listen(8080, "0.0.0.0", () => {
     console.log("listening on port 8080");
 })
 
