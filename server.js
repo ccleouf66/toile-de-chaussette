@@ -105,7 +105,7 @@ function removeClientToTrack(wsClient) {
 
 function openNewApexWs(trackId, trackPort, wsClient) {
     // open new apex ws client
-    wsApex = new WebSocket('ws://www.apex-timing.com:'+trackPort);
+    wsApex = new WebSocket('ws://www.apex-timing.com:'+trackPort, {origin: "http://www.apex-timing.com"});
 
     wsApex.on('error', console.error);
 
